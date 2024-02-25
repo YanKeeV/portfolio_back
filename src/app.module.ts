@@ -22,7 +22,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 
 @Module({
   imports: [
-    MongooseModule.forRoot('mongodb+srv://admin:m1r0sl4v@portfolio.hby09fk.mongodb.net/?retryWrites=true&w=majority&appName=portfolio'),
+    MongooseModule.forRoot(''),
     MongooseModule.forFeature([
       { name: 'Education', schema: EducationSchema },
       { name: 'Experience', schema: ExperienceSchema },
