@@ -1,8 +1,9 @@
-import { Controller, Get, Param, Post, Body, Delete, Res, Query, NotFoundException, HttpStatus } from '@nestjs/common';
+import { Controller, Get, Param, Post, Body, Delete, Res, Query, NotFoundException, HttpStatus, UseGuards } from '@nestjs/common';
 import { LanguageService } from './language.service';
 import { Language } from '../schemas/language.schema';
+import { AuthGuard } from '@nestjs/passport';
 
-@Controller('Languages')
+@Controller('languages')
 export class LanguageController {
   constructor(private readonly languageService: LanguageService) {}
 
@@ -11,11 +12,13 @@ export class LanguageController {
     return this.languageService.getLanguages();
   }
 
+  @UseGuards(AuthGuard())
   @Post('/post')
   createLanguage(@Body() language: Language): Promise<Language> {
     return this.languageService.createLanguage(language);
   }
 
+  @UseGuards(AuthGuard())
   @Delete('/delete')
   async deleteLanguage(@Res() res, @Query('languageID') languageID: string) {
     const deletedLanguage = await this.languageService.deleteLanguage(languageID);

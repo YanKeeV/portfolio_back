@@ -1,6 +1,7 @@
-import { Controller, Get, Param, Post, Body, Delete, Res, Query, NotFoundException, HttpStatus } from '@nestjs/common';
+import { Controller, Get, Param, Post, Body, Delete, Res, Query, NotFoundException, HttpStatus, UseGuards } from '@nestjs/common';
 import { EducationService } from './education.service';
 import { Education } from '../schemas/education.schema';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('educations')
 export class EducationController {
@@ -11,11 +12,13 @@ export class EducationController {
     return this.educationService.getEducations();
   }
 
+  @UseGuards(AuthGuard()) 
   @Post('/post')
   createEducation(@Body() education: Education): Promise<Education> {
     return this.educationService.createEducation(education);
   }
 
+  @UseGuards(AuthGuard()) 
   @Delete('/delete')
   async deleteEducation(@Res() res, @Query('educationID') educationID: string) {
     const deletedEducation = await this.educationService.deleteEducation(educationID);

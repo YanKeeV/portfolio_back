@@ -1,8 +1,9 @@
-import { Controller, Get, Param, Post, Body, Delete, Res, Query, NotFoundException, HttpStatus } from '@nestjs/common';
+import { Controller, Get, Param, Post, Body, Delete, Res, Query, NotFoundException, HttpStatus, UseGuards } from '@nestjs/common';
 import { SkillService } from './skill.service';
 import { Skill } from '../schemas/skill.schema';
+import { AuthGuard } from '@nestjs/passport';
 
-@Controller('skill')
+@Controller('skills')
 export class SkillController {
   constructor(private readonly skillService: SkillService) {}
 
@@ -11,11 +12,13 @@ export class SkillController {
     return this.skillService.getSkills();
   }
 
+  @UseGuards(AuthGuard())
   @Post('/post')
   createSkill(@Body() skill: Skill): Promise<Skill> {
     return this.skillService.createSkill(skill);
   }
 
+  @UseGuards(AuthGuard())
   @Delete('/delete')
   async deleteSkill(@Res() res, @Query('skillID') skillID: string) {
     const deletedSkill = await this.skillService.deleteSkill(skillID);

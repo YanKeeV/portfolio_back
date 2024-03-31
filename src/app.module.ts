@@ -18,19 +18,34 @@ import { LanguageController } from './language/language.controller';
 import { LanguageService } from './language/language.service';
 import { LanguageSchema } from './schemas/language.schema';
 
+import { ProjectController } from './project/project.controller';
+import { ProjectService } from './project/project.service';
+import { ProjectSchema } from './schemas/project.schema';
+
 import { MongooseModule } from '@nestjs/mongoose';
+import { AuthModule } from './auth/auth.module';
+import { UsersModule } from './users/users.module';
+import { ConfigModule } from '@nestjs/config';
+
 
 @Module({
   imports: [
-    MongooseModule.forRoot('mongodb+srv://admin:m1r0sl4v@portfolio.hby09fk.mongodb.net/?retryWrites=true&w=majority&appName=portfolio'),
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: 'envs/.backend.env',
+    }),
+    MongooseModule.forRoot(''),
     MongooseModule.forFeature([
       { name: 'Education', schema: EducationSchema },
       { name: 'Experience', schema: ExperienceSchema },
       { name: 'Skill', schema: SkillSchema },
       { name: 'Language', schema: LanguageSchema },
+      { name: 'Project', schema: ProjectSchema },
     ]),
+    AuthModule,
+    UsersModule,
   ],
-  controllers: [AppController, EducationController, ExperienceController, SkillController, LanguageController],
-  providers: [AppService, EducationService, ExperienceService, SkillService, LanguageService],
+  controllers: [AppController, EducationController, ExperienceController, SkillController, LanguageController, ProjectController],
+  providers: [AppService, EducationService, ExperienceService, SkillService, LanguageService, ProjectService],
 })
 export class AppModule {}
